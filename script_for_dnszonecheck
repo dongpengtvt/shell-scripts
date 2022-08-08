@@ -79,3 +79,21 @@ do
         fi
   done
 done
+#-----------------------------------------------------
+#头一次玩脚本，边搜索边测试，所以这里定义两个变量的时候，尝试了不同的语法和字符。
+#看了别人的方法，还是这种定义规范一些。
+[root@host1 /var/named]# vi ipv6zonecheck.sh 
+#!/bin/bash
+
+for j in $(cat /root/yuming | awk '{print $1}')
+do
+  for i in $(cat /root/nameserver | awk '{print $1}')
+  do
+        host -6 $j $i | grep "has IPv6 address"
+        if [ "$?" != "0" ];then
+                echo "$i ------resolve----->Failed!"
+        else
+                echo "$i ------resolve----->Success!"
+        fi
+  done
+done
