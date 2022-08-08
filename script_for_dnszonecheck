@@ -1,0 +1,74 @@
+[root@host1 /var/named]# cat ipv6zonecheck.sh
+#!/bin/bash
+
+for i in `cat /root/dns.txt| awk '{print $1}'`
+do
+        host -6 $1 $i | grep "has IPv6 address"
+
+# The special shell parameter $? contains the exit code from the last command run. 
+# Every command you run from the shell reports a numeric status back to the shell when it finishes running; 
+# in general, a value of 0 means the command succeeded, and a nonzero value means it failed.
+# And the != operator means 'is not equal to', so [ $? != 0 ] is checking to see if $? is not equal to zero.
+
+
+        if [ "$?" != "0" ];then
+                echo "$i ------resolve----->>>>failed!"
+        else
+                        echo "$i ------resolve----->>>>OK!"
+        fi
+
+done
+[root@host1 /var/named]# cat /root/dns.txt
+192.168.0.100
+192.168.0.200
+192.168.0.203
+2001:250:4000:2000::100
+2001:250:4000:2000::200
+2001:250:4000:2000::203
+[root@host1 /var/named]# cat zonecheck.sh
+#!/bin/bash
+
+Time=$(date '+%Y-%m-%d %H:%M:%S')
+
+for i in `cat /root/dns.txt| awk '{print $1}'`
+do
+        host $1 $i | grep 'has address'
+        if [ "$?" != "0" ];then
+                echo "$i ------resolve----->failed!"
+        else
+                echo "$i ------resolve----->OK!"
+        fi
+
+done
+[root@host1 /var/named]# 
+
+#----------------------------------------------------
+#!/bin/bash
+
+for j in `cat /root/yuming | awk '{print $1}'`
+do
+  for i in `cat /root/nameserver | awk '{print $1}'`
+  do
+        host -6 $j $i | grep "has IPv6 address"
+        if [ "$?" != "0" ];then
+                echo "$i ------resolve----->Failed!"
+        else
+                echo "$i ------resolve----->Success!"
+        fi
+  done
+done
+#----------------------------------------------------
+#!/bin/bash
+
+for j in $(cat /root/yuming | awk '{print $1}')
+do
+  for i in `cat /root/nameserver | awk '{print $1}'`
+  do
+        host -6 $j $i | grep "has IPv6 address"
+        if [ "$?" != "0" ];then
+                echo "$i ------resolve----->Failed!"
+        else
+                echo "$i ------resolve----->Success!"
+        fi
+  done
+done
