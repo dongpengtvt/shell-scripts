@@ -1,2 +1,2 @@
 # shell-scripts
-随笔
+日常记录
